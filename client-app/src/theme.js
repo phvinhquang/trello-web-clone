@@ -6,8 +6,8 @@ import { cyan, deepOrange, orange, red, teal } from "@mui/material/colors";
 // Nếu không dùng SSR có thể sử dụng create theme.
 const theme = extendTheme({
   customVars: {
-    appBarHeight: "48px",
-    boardBarHeight: "58px",
+    appBarHeight: "58px",
+    boardBarHeight: "60px",
   },
   colorSchemes: {
     light: {

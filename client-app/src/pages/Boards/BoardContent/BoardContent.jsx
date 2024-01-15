@@ -12,7 +12,7 @@ const BoardContent = function () {
         alignItems: "center",
       }}
     >
-      Boart Content
+      Board Content
     </Box>
   );
 };

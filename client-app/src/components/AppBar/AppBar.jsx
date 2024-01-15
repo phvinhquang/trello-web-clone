@@ -4,9 +4,20 @@ import theme from "../../theme";
 
 // Icon
 import AppsIcon from "@mui/icons-material/Apps";
+import Button from "@mui/material/Button";
+import Badge from "@mui/material/Badge";
+import TextField from "@mui/material/TextField";
 import TrelloIcon from "~/assets/trello.svg?react";
+import Workspaces from "./Menus/Workspaces";
+import Recents from "./Menus/Recents";
+import Tooltip from "@mui/material/Tooltip";
 import { SvgIcon } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import Starred from "./Menus/Starred";
+import Templates from "./Menus/Templates";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import Profile from "./Menus/Profile";
 
 const AppBar = function () {
   return (
@@ -45,10 +56,31 @@ const AppBar = function () {
             Trello
           </Typography>
         </Box>
+
+        <Workspaces />
+        <Recents />
+        <Starred />
+        <Templates />
+        <Button variant="outlined">Create</Button>
       </Box>
 
-      <Box>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+        <TextField
+          id="outlined-search"
+          label="Search..."
+          type="search"
+          size="small"
+        />
         <ModeSelect />
+        <Tooltip title="Notification">
+          <Badge color="secondary" variant="dot" sx={{ cursor: "pointer" }}>
+            <NotificationsNoneIcon />
+          </Badge>
+        </Tooltip>
+        <Tooltip title="Help">
+          <HelpOutlineIcon />
+        </Tooltip>
+        <Profile />
       </Box>
     </Box>
   );

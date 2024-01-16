@@ -10,6 +10,8 @@ const BoardContent = function () {
         height: `calc(100vh - ${theme.customVars.appBarHeight} - ${theme.customVars.boardBarHeight})`,
         display: "flex",
         alignItems: "center",
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "#34495e" : "#1976d2",
       }}
     >
       Board Content

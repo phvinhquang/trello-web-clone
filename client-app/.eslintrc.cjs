@@ -6,6 +6,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
+    "prettier",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@babel/eslint-parser",
@@ -44,5 +45,5 @@ module.exports = {
     "comma-spacing": 1,
     "arrow-spacing": 1,
   },
-  extends: ["prettier"],
+  // extends: ["prettier"],
 };

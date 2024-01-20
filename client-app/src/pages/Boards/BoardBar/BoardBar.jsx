@@ -22,8 +22,8 @@ const chipStyle = {
   border: "none",
   px: "5px",
   borderRadius: "4px",
-  "& .MuiSvgIcon-root": {
-    color: "primary.main",
+  ".MuiSvgIcon-root": {
+    color: "white",
   },
   "&:hover": {
     bgcolor: "primary.50",
@@ -45,7 +45,7 @@ const BoardBar = function () {
         overflowX: "auto",
         backgroundColor: (theme) =>
           theme.palette.mode === "dark" ? "#34495e" : "#1976d2",
-        borderBottom: "1px solid #00bfa5",
+        // borderBottom: "1px solid #00bfa5",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -98,9 +98,38 @@ const BoardBar = function () {
               height: 32,
               fontSize: 16,
               border: "none",
+              color: "white",
+              cursor: "pointer",
+              "&:first-of-type": {
+                backgroundColor: "#a4b0be",
+              },
             },
           }}
         >
+          <Tooltip title="smt">
+            <Avatar
+              alt="jeremypisces04@gmail.com"
+              src="/static/images/avatar/1.jpg"
+            />
+          </Tooltip>
+          <Tooltip title="smt">
+            <Avatar
+              alt="jeremypisces04@gmail.com"
+              src="/static/images/avatar/1.jpg"
+            />
+          </Tooltip>
+          <Tooltip title="smt">
+            <Avatar
+              alt="jeremypisces04@gmail.com"
+              src="/static/images/avatar/1.jpg"
+            />
+          </Tooltip>
+          <Tooltip title="smt">
+            <Avatar
+              alt="jeremypisces04@gmail.com"
+              src="/static/images/avatar/1.jpg"
+            />
+          </Tooltip>
           <Tooltip title="smt">
             <Avatar
               alt="jeremypisces04@gmail.com"

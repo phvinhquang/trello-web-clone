@@ -1,4 +1,6 @@
-import theme from "../../../theme";
+import ListColumns from "./ListColumns/ListColumns";
+
+// Import Components from MUI
 import { Box } from "@mui/material";
 
 const BoardContent = function () {
@@ -6,15 +8,14 @@ const BoardContent = function () {
     <Box
       sx={{
         backgroundColor: "primary.main",
+        paddingBottom: "5px",
         width: "100%",
-        height: `calc(100vh - ${theme.customVars.appBarHeight} - ${theme.customVars.boardBarHeight})`,
-        display: "flex",
-        alignItems: "center",
+        height: (theme) => theme.customVars.boardContentHeight,
         backgroundColor: (theme) =>
           theme.palette.mode === "dark" ? "#34495e" : "#1976d2",
       }}
     >
-      Board Content
+      <ListColumns />
     </Box>
   );
 };

@@ -1,4 +1,5 @@
 import theme from "~/theme";
+import { capitalizeFirstLetter } from "~/utils/capitalizeFirstLetter";
 
 // Import Components from MUI
 import Box from "@mui/material/Box";
@@ -30,7 +31,7 @@ const chipStyle = {
   },
 };
 
-const BoardBar = function () {
+const BoardBar = function ({ board }) {
   return (
     <Box
       px={2}
@@ -52,13 +53,13 @@ const BoardBar = function () {
         <Chip
           sx={chipStyle}
           icon={<DashboardIcon />}
-          label="phvinhquang"
+          label={board?.title}
           clickable
         />
         <Chip
           sx={chipStyle}
           icon={<VpnLockIcon />}
-          label="Public/Private Workspace"
+          label={capitalizeFirstLetter(board?.type)}
           clickable
         />
         <Chip

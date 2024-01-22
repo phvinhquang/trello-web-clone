@@ -1,3 +1,6 @@
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 // Components from MUI
 import { Box, Typography, Button } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -10,20 +13,53 @@ import GroupIcon from "@mui/icons-material/Group";
 import ModeCommentIcon from "@mui/icons-material/ModeComment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 
-const CardItem = function () {
+const CardItem = function ({ card }) {
+  // DndKit
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: card._id,
+    data: { ...card },
+    animateLayoutChanges: () => false,
+  });
+
+  const dndKitCardStyles = {
+    touchAction: "none",
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : undefined,
+  };
+
+  const showCardActions =
+    card.memberIds.length > 0 ||
+    card.comments.length > 0 ||
+    card.attachments.length > 0;
+
   return (
     <Card
+      ref={setNodeRef}
+      style={dndKitCardStyles}
+      {...attributes}
+      {...listeners}
       sx={{
         cursor: "pointer",
         boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.2)",
         overflow: "unset",
       }}
     >
-      <CardMedia
-        sx={{ height: 140 }}
-        image="https://c4.wallpaperflare.com/wallpaper/448/174/357/neon-4k-hd-best-for-desktop-wallpaper-preview.jpg"
-        title="green iguana"
-      />
+      {card.cover && (
+        <CardMedia
+          sx={{ height: 140 }}
+          image={card.cover}
+          // title="green iguana"
+        />
+      )}
+
       <CardContent
         sx={{
           padding: 1.5,
@@ -32,19 +68,27 @@ const CardItem = function () {
           },
         }}
       >
-        <Typography sx={{ textAlign: "left" }}>Some Card</Typography>
+        <Typography sx={{ textAlign: "left" }}>{card?.title}</Typography>
       </CardContent>
-      <CardActions sx={{ padding: "0 4px 8px 4px" }}>
-        <Button size="small" startIcon={<GroupIcon />}>
-          20
-        </Button>
-        <Button size="small" startIcon={<ModeCommentIcon />}>
-          15
-        </Button>
-        <Button size="small" startIcon={<AttachmentIcon />}>
-          10
-        </Button>
-      </CardActions>
+      {showCardActions && (
+        <CardActions sx={{ padding: "0 4px 8px 4px" }}>
+          {card?.memberIds.length > 0 && (
+            <Button size="small" startIcon={<GroupIcon />}>
+              {card.memberIds.length}
+            </Button>
+          )}
+          {card?.comments.length > 0 && (
+            <Button size="small" startIcon={<ModeCommentIcon />}>
+              {card.comments.length}
+            </Button>
+          )}
+          {card?.attachments.length > 0 && (
+            <Button size="small" startIcon={<AttachmentIcon />}>
+              {card.attachments.length}
+            </Button>
+          )}
+        </CardActions>
+      )}
     </Card>
   );
 };

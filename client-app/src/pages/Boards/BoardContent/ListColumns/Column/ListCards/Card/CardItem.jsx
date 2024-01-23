@@ -37,9 +37,9 @@ const CardItem = function ({ card }) {
   };
 
   const showCardActions =
-    card.memberIds.length > 0 ||
-    card.comments.length > 0 ||
-    card.attachments.length > 0;
+    card.memberIds?.length > 0 ||
+    card.comments?.length > 0 ||
+    card.attachments?.length > 0;
 
   return (
     <Card
@@ -51,6 +51,7 @@ const CardItem = function ({ card }) {
         cursor: "pointer",
         boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.2)",
         overflow: "unset",
+        display: card?.FE_placeholderCard ? "none" : "block",
       }}
     >
       {card.cover && (

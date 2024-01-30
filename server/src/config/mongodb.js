@@ -2,7 +2,7 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 import "dotenv/config";
 
 // Tạo biến chứa database instance, ban đầu là null
-let databaseInstance = null;
+let databaseInstance;
 
 // Tạo 1 đối tượng Client để connect với MongoDb
 const mongoClientInstance = new MongoClient(`${process.env.MONGODB_URI}`, {

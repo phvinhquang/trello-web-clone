@@ -50,16 +50,18 @@ const BoardBar = function ({ board }) {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-        <Chip
-          sx={chipStyle}
-          icon={<DashboardIcon />}
-          label={board?.title}
-          clickable
-        />
+        <Tooltip title={board?.description}>
+          <Chip
+            sx={chipStyle}
+            icon={<DashboardIcon />}
+            label={board?.title}
+            clickable
+          />
+        </Tooltip>
         <Chip
           sx={chipStyle}
           icon={<VpnLockIcon />}
-          label={capitalizeFirstLetter(board?.type)}
+          label={capitalizeFirstLetter(board?.type) || "Public"}
           clickable
         />
         <Chip

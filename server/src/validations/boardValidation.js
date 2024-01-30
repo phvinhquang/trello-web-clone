@@ -1,4 +1,5 @@
 import Joi from "joi";
+import ApiError from "../utils/ApiError.js";
 
 const createNew = async (req, res, next) => {
   const correctCondition = Joi.object({
@@ -10,17 +11,18 @@ const createNew = async (req, res, next) => {
       "any.required": `"a" is a required field`,
     }),
     description: Joi.string().required().min(3).max(250).trim().strict(),
+    type: Joi.string().valid("public", "private"),
   });
 
   try {
     // abortEarly: false để thông báo tất cả các lỗi (không chỉ lỗi đầu tiên)
     await correctCondition.validateAsync(req.body, { abortEarly: false });
 
-    res.json("This is to create new board");
+    next();
   } catch (err) {
-    console.log(err);
-    const errorDetails = err?.details?.map((d) => d.message);
-    res.status(422).json({ errors: err.message });
+    // const errorDetails = err?.details?.map((d) => d.message);
+    const error = new ApiError(422, err.message);
+    next(error);
   }
 };
 

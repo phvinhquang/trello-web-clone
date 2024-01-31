@@ -1,16 +1,37 @@
 import { useState } from "react";
 import Column from "./Column/Column";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
 // Import Componets from MUI
-import { Box, Button } from "@mui/material";
+import { Box, Button, ButtonBase } from "@mui/material";
 
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 
 const ListColumns = function ({ columns }) {
+  const [showAddColumnInput, setShowAddColumnInput] = useState(false);
+  const [columnInput, setColumnInput] = useState("");
+
+  const toggleShowAddColumnInput = function () {
+    setShowAddColumnInput((prev) => !prev);
+  };
+
+  const addNewColumnHandler = function () {
+    if (!columnInput) return;
+
+    //// API
+
+    // Clear input và đóng thẻ input
+    setColumnInput("");
+    setShowAddColumnInput(false);
+  };
+
   // items trong SortableContext yêu cầu 1 array gồm các primitive values
   // Nên thông thường map items ra để lấy chỉ id (hoặc giá trị tương tự id), không để cả object
   return (
@@ -39,29 +60,109 @@ const ListColumns = function ({ columns }) {
         ))}
 
         {/* Add new Column Button */}
-        <Box
-          sx={{
-            minWidth: "200px",
-            maxWidth: "200px",
-            marginX: 2,
-            borderRadius: "6px",
-            height: "fit-content",
-            backgroundColor: "#ffffff3d",
-          }}
-        >
-          <Button
+        {!showAddColumnInput && (
+          <Box
             sx={{
-              color: "white",
-              width: "100%",
-              justifyContent: "flex-start",
-              paddingLeft: 2.5,
-              paddingY: 1,
+              minWidth: "250px",
+              maxWidth: "250px",
+              marginX: 2,
+              borderRadius: "6px",
+              height: "fit-content",
+              backgroundColor: "#ffffff3d",
             }}
-            startIcon={<NoteAddIcon />}
+            onClick={toggleShowAddColumnInput}
           >
-            Add New Column
-          </Button>
-        </Box>
+            <Button
+              sx={{
+                color: "white",
+                width: "100%",
+                justifyContent: "flex-start",
+                paddingLeft: 2.5,
+                paddingY: 1,
+              }}
+              startIcon={<NoteAddIcon />}
+            >
+              Add New Column
+            </Button>
+          </Box>
+        )}
+        {showAddColumnInput && (
+          <Box
+            sx={{
+              minWidth: "250px",
+              maxWidth: "250px",
+              marginX: 2,
+              padding: 1,
+              borderRadius: "6px",
+              height: "fit-content",
+              backgroundColor: "#ffffff3d",
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            <TextField
+              // id="outlined-search"
+              label="Enter Column Title ..."
+              type="text"
+              size="small"
+              variant="outlined"
+              autoFocus
+              value={columnInput}
+              onChange={(e) => setColumnInput(e.target.value)}
+              // onBlur={textFieldBlurHandler}
+
+              sx={{
+                "& label": { color: "white" },
+                "& input": { color: "white" },
+                "& label.Mui-focused": { color: "white" },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "white",
+                    outline: "none",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "white",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "white",
+                    borderWidth: 1,
+                  },
+                },
+              }}
+            />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Button
+                onClick={addNewColumnHandler}
+                variant="contained"
+                color="success"
+                size="small"
+                sx={{
+                  paddingX: 3,
+                  boxShadow: "none",
+                  border: "0.5px solid",
+                  borderColor: (theme) => theme.palette.success.main,
+                  "&:hover": {
+                    backgroundColor: (theme) => theme.palette.success.main,
+                  },
+                }}
+              >
+                Add Column
+              </Button>
+              <CloseIcon
+                onClick={toggleShowAddColumnInput}
+                fontSize="small"
+                sx={{
+                  color: "white",
+                  cursor: "pointer",
+                  "&:hover": {
+                    color: (theme) => theme.palette.warning.light,
+                  },
+                }}
+              />
+            </Box>
+          </Box>
+        )}
       </Box>
     </SortableContext>
   );

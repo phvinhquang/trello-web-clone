@@ -15,12 +15,14 @@ import Cloud from "@mui/icons-material/Cloud";
 import ContentCut from "@mui/icons-material/ContentCut";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import ContentPaste from "@mui/icons-material/ContentPaste";
+import TextField from "@mui/material/TextField";
 
 // Import Icons from MUI
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Column = function ({ column }) {
   // DndKit
@@ -51,10 +53,27 @@ const Column = function ({ column }) {
 
   // Data for card
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, "_id");
-
   const handleClick = (event) => setAnchorEl(event.currentTarget);
-
   const handleClose = () => setAnchorEl(null);
+
+  // Add new Card
+  const [showAddCardInput, setShowAddCardInput] = useState(false);
+  const [cardInput, setCardInput] = useState("");
+
+  const toggleShowAddCardInput = function () {
+    setShowAddCardInput((prev) => !prev);
+  };
+
+  const addNewCardHandler = function () {
+    if (!cardInput) return;
+
+    //// API
+
+    // Clear input và đóng thẻ input
+    setCardInput("");
+    setShowAddCardInput(false);
+  };
+
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
@@ -164,19 +183,110 @@ const Column = function ({ column }) {
           sx={{
             height: (theme) => theme.customVars.columnFooterHeight,
             padding: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
           }}
         >
-          <Button startIcon={<AddCardIcon />}>Add New Card</Button>
-          <Tooltip title="Drag to move">
-            <DragHandleIcon
+          {!showAddCardInput && (
+            <Box
               sx={{
-                cursor: "pointer",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
-            />
-          </Tooltip>
+            >
+              <Button
+                startIcon={<AddCardIcon />}
+                onClick={toggleShowAddCardInput}
+              >
+                Add New Card
+              </Button>
+              <Tooltip title="Drag to move">
+                <DragHandleIcon sx={{ cursor: "pointer" }} />
+              </Tooltip>
+            </Box>
+          )}
+          {showAddCardInput && (
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <TextField
+                // id="outlined-search"
+                label="Enter Column Title ..."
+                type="text"
+                size="small"
+                variant="outlined"
+                autoFocus
+                data-no-dnd="true"
+                value={cardInput}
+                onChange={(e) => setCardInput(e.target.value)}
+                // onBlur={textFieldBlurHandler}
+
+                sx={{
+                  "& label": { color: "text.primary" },
+                  "& input": {
+                    color: (theme) => theme.palette.primary.main,
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === "dark" ? "#333643" : "white",
+                  },
+                  "& label.Mui-focused": {
+                    color: (theme) => theme.palette.primary.main,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: (theme) => theme.palette.primary.main,
+                    },
+                    "&:hover fieldset": {
+                      borderColor: (theme) => theme.palette.primary.main,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: (theme) => theme.palette.primary.main,
+                    },
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    borderRadius: 1,
+                  },
+                }}
+              />
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Button
+                  onClick={addNewCardHandler}
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  data-no-dnd="true"
+                  sx={{
+                    paddingX: 1,
+                    boxShadow: "none",
+                    border: "0.5px solid",
+                    borderColor: (theme) => theme.palette.success.main,
+                    "&:hover": {
+                      backgroundColor: (theme) => theme.palette.success.main,
+                    },
+                    width: "max-content",
+                  }}
+                >
+                  Add Card
+                </Button>
+                <CloseIcon
+                  onClick={toggleShowAddCardInput}
+                  fontSize="small"
+                  sx={{
+                    color: (theme) => theme.palette.error.light,
+                    cursor: "pointer",
+                    "&:hover": {
+                      color: (theme) => theme.palette.warning.light,
+                      cursor: "pointer ",
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
+          )}
         </Box>
       </Box>
     </div>

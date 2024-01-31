@@ -52,6 +52,8 @@ const CardItem = function ({ card }) {
         boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.2)",
         overflow: "unset",
         display: card?.FE_placeholderCard ? "none" : "block",
+        border: "1px solid transparent",
+        "&:hover": { borderColor: (theme) => theme.palette.primary.light },
       }}
     >
       {card.cover && (

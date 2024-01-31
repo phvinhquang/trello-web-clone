@@ -5,6 +5,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
 // import { ThemeProvider } from "@mui/material/styles";
 
+// Package gửi flash message
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import theme from "./theme.js";
 import "./index.css";
 
@@ -13,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <CssVarsProvider theme={theme}>
       <CssBaseline />
       <App />
+      <ToastContainer position="bottom-left" theme="colored" />
     </CssVarsProvider>
   </React.StrictMode>
 );

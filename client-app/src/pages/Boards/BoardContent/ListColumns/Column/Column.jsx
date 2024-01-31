@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import ListCards from "./ListCards/ListCards";
 import { mapOrder } from "~/utils/sortArray";
 import { useSortable, arrayMove } from "@dnd-kit/sortable";
@@ -24,7 +25,7 @@ import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import CloseIcon from "@mui/icons-material/Close";
 
-const Column = function ({ column }) {
+const Column = function ({ column, onCreateCard }) {
   // DndKit
   const {
     attributes,
@@ -65,9 +66,20 @@ const Column = function ({ column }) {
   };
 
   const addNewCardHandler = function () {
-    if (!cardInput) return;
+    if (!cardInput) {
+      toast.error("Hãy nhập tên card để tiếp tục", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    const cardData = {
+      title: cardInput,
+      columnId: column._id,
+    };
 
     //// API
+    onCreateCard(cardData);
 
     // Clear input và đóng thẻ input
     setCardInput("");

@@ -2,6 +2,8 @@ import express from "express";
 import { C0NNECT_DB, CLOSE_DB } from "./config/mongodb.js";
 import exitHook from "async-exit-hook";
 import boardRoutes from "./routes/v1/boardRoutes.js";
+import columnRoutes from "./routes/v1/columnRoutes.js";
+import cardRoutes from "./routes/v1/cardRoutes.js";
 import { corsOptions } from "./config/cors.js";
 import "dotenv/config";
 import cors from "cors";
@@ -16,6 +18,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/v1", boardRoutes);
+app.use("/v1", columnRoutes);
+app.use("/v1", cardRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

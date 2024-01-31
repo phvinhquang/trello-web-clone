@@ -1,20 +1,19 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import Column from "./Column/Column";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
 // Import Componets from MUI
-import { Box, Button, ButtonBase } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import CloseIcon from "@mui/icons-material/Close";
 
-const ListColumns = function ({ columns }) {
+const ListColumns = function ({ columns, onCreateColumn, onCreateCard }) {
   const [showAddColumnInput, setShowAddColumnInput] = useState(false);
   const [columnInput, setColumnInput] = useState("");
 
@@ -23,9 +22,16 @@ const ListColumns = function ({ columns }) {
   };
 
   const addNewColumnHandler = function () {
-    if (!columnInput) return;
-
+    // Báo lỗi nếu input rỗng
+    if (!columnInput) {
+      toast.error("Hãy nhập gì đó để tiếp tục");
+      return;
+    }
     //// API
+    const columnData = {
+      title: columnInput,
+    };
+    onCreateColumn(columnData);
 
     // Clear input và đóng thẻ input
     setColumnInput("");
@@ -42,7 +48,6 @@ const ListColumns = function ({ columns }) {
       <Box
         sx={{
           paddingTop: "10px",
-
           display: "flex",
           overflowX: "auto",
           overflowY: "hidden",
@@ -56,7 +61,7 @@ const ListColumns = function ({ columns }) {
       >
         {/* Columns rendering */}
         {columns.map((column, i) => (
-          <Column key={i} column={column} />
+          <Column onCreateCard={onCreateCard} key={i} column={column} />
         ))}
 
         {/* Add new Column Button */}

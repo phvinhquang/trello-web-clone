@@ -4,9 +4,10 @@ import { boardController } from "../../controllers/boardController.js";
 
 const router = express.Router();
 
-router.get("/board/:id", boardController.getDetails);
+// Fetch board
+router.get("/boards/:id", boardController.getDetails);
 
 // Tạo board mới
-router.post("/board", boardValidation.createNew, boardController.createNew);
+router.post("/boards", boardValidation.createNew, boardController.createNew);
 
 export default router;

@@ -89,7 +89,28 @@ const getDetails = async (boardId) => {
       ])
       .toArray();
 
-    return result[0] || {};
+    return result[0] || null;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+// Thêm columnId mới được tạo vào columnOrderIds
+const pushColumnOrderIds = async (column) => {
+  try {
+    const db = GET_DB();
+
+    const result = await db.collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new mongodb.ObjectId(column.boardId) },
+      {
+        $push: {
+          columnOrderIds: new mongodb.ObjectId(column._id),
+        },
+      },
+      { returnDocument: "after" }
+    );
+
+    return result.value || null;
   } catch (err) {
     throw new Error(err);
   }
@@ -101,4 +122,5 @@ export const boardModel = {
   createNew,
   findById,
   getDetails,
+  pushColumnOrderIds,
 };

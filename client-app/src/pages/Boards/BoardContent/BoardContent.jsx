@@ -28,7 +28,12 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
 
-const BoardContent = function ({ board }) {
+const BoardContent = function ({
+  board,
+  onCreateColumn,
+  onCreateCard,
+  onUpdateColumnOrder,
+}) {
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
   const [activeDragItemType, setActiveDragItemType] = useState(null);
@@ -228,7 +233,8 @@ const BoardContent = function ({ board }) {
       over,
       activeColumn,
       activeCardId,
-      activeDragItemData
+      activeDraggingCardData
+      // activeDragItemData
     );
   };
 
@@ -309,6 +315,9 @@ const BoardContent = function ({ board }) {
       // Đổi vị trí
       const dndOrderedColumns = arrayMove(orderedColumns, oldIndex, newIndex);
       const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id);
+
+      // Gọi hàm cập nhật order mới lên db
+      onUpdateColumnOrder(dndOrderedColumns);
       setOrderedColumns(dndOrderedColumns);
     }
 
@@ -350,7 +359,11 @@ const BoardContent = function ({ board }) {
             theme.palette.mode === "dark" ? "#34495e" : "#1976d2",
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          onCreateColumn={onCreateColumn}
+          onCreateCard={onCreateCard}
+        />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (

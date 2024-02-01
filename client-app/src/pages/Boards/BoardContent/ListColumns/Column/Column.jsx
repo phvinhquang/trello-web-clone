@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import ListCards from "./ListCards/ListCards";
-import { mapOrder } from "~/utils/sortArray";
 import { useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
@@ -53,7 +52,7 @@ const Column = function ({ column, onCreateCard }) {
   const open = Boolean(anchorEl);
 
   // Data for card
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, "_id");
+  const orderedCards = column?.cards;
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 

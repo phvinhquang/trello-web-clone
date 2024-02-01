@@ -19,6 +19,9 @@ const BOARD_COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false),
 });
 
+// Những field mà ta không cho phép cập nhật
+const INVALID_UPDATE_FIELDS = ["_id", "createdAt"];
+
 // Validate 2 lần ở route và model để tránh trường hợp
 // trong controller hoặc service code lỗi khiến data bị
 // mutate thành không hợp lệ nhưng vẫn pass
@@ -110,7 +113,35 @@ const pushColumnOrderIds = async (column) => {
       { returnDocument: "after" }
     );
 
-    return result.value || null;
+    return result || null;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const update = async (boardId, updatedData) => {
+  try {
+    const db = GET_DB();
+
+    // Xóa những field không được phép cập nhật ra khỏi updatedData
+    Object.keys(updatedData).forEach((key) => {
+      if (INVALID_UPDATE_FIELDS.includes(key)) {
+        delete updatedData[key];
+      }
+    });
+
+    console.log(updatedData);
+
+    // Thực hiện update trong db
+    const result = await db.collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new mongodb.ObjectId(boardId) },
+      {
+        $set: updatedData,
+      },
+      { returnDocument: "after" }
+    );
+
+    return result || null;
   } catch (err) {
     throw new Error(err);
   }
@@ -123,4 +154,5 @@ export const boardModel = {
   findById,
   getDetails,
   pushColumnOrderIds,
+  update,
 };

@@ -28,28 +28,22 @@ const createNew = async (reqBody) => {
   }
 };
 
-// const getDetails = async (boardId) => {
-//   try {
-//     const board = await boardModel.getDetails(boardId);
-//     if (!board) throw new ApiError(404, "Could not find board's details");
+const update = async (columnId, reqBody) => {
+  try {
+    const updatedData = {
+      ...reqBody,
+      updatedAt: Date.now(),
+    };
 
-//     // Dữ liệu trả về
-//     const response = cloneDeep(board);
-//     response.columns.forEach((column) => {
-//       column.cards = response.cards.filter(
-//         (card) =>
-//           // console.log(card)
-//           card.columnId.toString() === column._id.toString()
-//       );
-//     });
+    const updatedColumn = await columnModel.update(columnId, updatedData);
 
-//     return response;
-//   } catch (err) {
-//     throw err;
-//   }
-// };
+    return updatedColumn;
+  } catch (err) {
+    throw err;
+  }
+};
 
 export const columnService = {
   createNew,
-  //   getDetails,
+  update,
 };

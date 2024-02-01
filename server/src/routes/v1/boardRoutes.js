@@ -10,4 +10,7 @@ router.get("/boards/:id", boardController.getDetails);
 // Tạo board mới
 router.post("/boards", boardValidation.createNew, boardController.createNew);
 
+// Cập nhật thứ tự column cho board
+router.put("/boards/:id", boardValidation.update, boardController.update);
+
 export default router;

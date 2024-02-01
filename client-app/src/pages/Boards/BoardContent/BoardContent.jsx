@@ -1,5 +1,4 @@
 import ListColumns from "./ListColumns/ListColumns";
-import { mapOrder } from "~/utils/sortArray";
 import { generatePlaceHolderCard } from "~/utils/helpers";
 import {
   DndContext,
@@ -33,6 +32,7 @@ const BoardContent = function ({
   onCreateColumn,
   onCreateCard,
   onUpdateColumnOrder,
+  onUpdateCardInSameColumn,
 }) {
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -51,7 +51,7 @@ const BoardContent = function ({
 
   // Tạo data cho columns
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, "_id"));
+    setOrderedColumns(board?.columns);
   }, [board]);
 
   // Hàm tìm column theo card id
@@ -284,6 +284,7 @@ const BoardContent = function ({
           oldIndex,
           newIndex
         );
+        const dndOrderedCardIds = dndOrderedCards.map((c) => c._id);
 
         // Cập nhật vị trí card trong column
         setOrderedColumns((prev) => {
@@ -295,10 +296,17 @@ const BoardContent = function ({
             (c) => c._id === overColumn._id
           );
           currentColumn.cards = dndOrderedCards;
-          currentColumn.cardOrderIds = dndOrderedCards.map((c) => c._id);
+          currentColumn.cardOrderIds = dndOrderedCardIds;
 
           return copiedColumns;
         });
+
+        // Cập nhật lên db
+        onUpdateCardInSameColumn(
+          dndOrderedCards,
+          dndOrderedCardIds,
+          originalColumn._id
+        );
       }
     }
 
@@ -317,8 +325,8 @@ const BoardContent = function ({
       const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id);
 
       // Gọi hàm cập nhật order mới lên db
-      onUpdateColumnOrder(dndOrderedColumns);
       setOrderedColumns(dndOrderedColumns);
+      onUpdateColumnOrder(dndOrderedColumns);
     }
 
     // Set Active Item về null

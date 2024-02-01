@@ -24,7 +24,20 @@ const getDetails = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    const columnId = req.params.id;
+
+    const updatedColumn = await boardService.update(columnId, req.body);
+
+    res.status(201).json(updatedColumn);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const columnController = {
   createNew,
   getDetails,
+  update,
 };

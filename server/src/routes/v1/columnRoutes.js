@@ -9,4 +9,7 @@ const router = express.Router();
 // Tạo column mới
 router.post("/columns", columnValidation.createNew, columnController.createNew);
 
+// Cập nhật card trong cùng column
+router.put("/columns/:id", columnValidation.update, columnController.update);
+
 export default router;

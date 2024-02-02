@@ -43,7 +43,13 @@ exitHook(() => {
 
 // Kết nối tới database xong mới kích hoạt app
 C0NNECT_DB(() => {
-  app.listen(5000);
+  if (process.env.BUILD_MODE !== "dev") {
+    app.listen(5000);
+  }
+
+  if (process.env.BUILD_MODE !== "production") {
+    app.listen(process.env.PORT);
+  }
 })
   .then(() => {
     console.log("Connected to MongoDB");

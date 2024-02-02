@@ -12,7 +12,6 @@ const createNew = async (req, res, next) => {
   });
 
   try {
-    console.log(req.body);
     // abortEarly: false để thông báo tất cả các lỗi (không chỉ lỗi đầu tiên)
     await correctCondition.validateAsync(req.body, { abortEarly: false });
 
@@ -49,7 +48,26 @@ const update = async (req, res, next) => {
   }
 };
 
+const deleteItem = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    id: Joi.string()
+      .required()
+      .pattern(OBJECT_ID_RULE)
+      .message(OBJECT_ID_RULE_MESSAGE),
+  });
+
+  try {
+    await correctCondition.validateAsync(req.params);
+
+    next();
+  } catch (err) {
+    const error = new ApiError(422, err.message);
+    next(error);
+  }
+};
+
 export const columnValidation = {
   createNew,
   update,
+  deleteItem,
 };

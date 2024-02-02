@@ -1,5 +1,7 @@
 import { columnModel } from "../models/columnModel.js";
 import { boardModel } from "../models/boardModel.js";
+import { cardModel } from "../models/cardModel.js";
+import ApiError from "../utils/ApiError.js";
 // import ApiError from "../utils/ApiError.js";
 // import cloneDeep from "lodash/cloneDeep.js";
 
@@ -43,7 +45,29 @@ const update = async (columnId, reqBody) => {
   }
 };
 
+const deleteItem = async (columnId) => {
+  try {
+    // Tìm column bị xóa
+    const column = await columnModel.findById(columnId);
+    if (!column) throw new ApiError(404, "Can not find that column");
+
+    // Xóa column
+    await columnModel.deleteOneById(columnId);
+
+    // Xóa card thuộc column
+    await cardModel.deleteCardsByColumn(columnId);
+
+    // Xóa columnId trong columnOrderIds của Board
+    await boardModel.pullColumnOrderIds(column);
+
+    return { result: "Delete successfully !" };
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const columnService = {
   createNew,
   update,
+  deleteItem,
 };

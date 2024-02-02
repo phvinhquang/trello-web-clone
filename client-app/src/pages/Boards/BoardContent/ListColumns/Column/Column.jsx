@@ -23,8 +23,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import CloseIcon from "@mui/icons-material/Close";
+import { useConfirm } from "material-ui-confirm";
 
-const Column = function ({ column, onCreateCard }) {
+const Column = function ({ column, onCreateCard, onDeleteColumn }) {
   // DndKit
   const {
     attributes,
@@ -60,10 +61,12 @@ const Column = function ({ column, onCreateCard }) {
   const [showAddCardInput, setShowAddCardInput] = useState(false);
   const [cardInput, setCardInput] = useState("");
 
+  // Ẩn/hiển input thêm card
   const toggleShowAddCardInput = function () {
     setShowAddCardInput((prev) => !prev);
   };
 
+  // Xử lý sự kiện thêm card mới
   const addNewCardHandler = function () {
     if (!cardInput) {
       toast.error("Hãy nhập tên card để tiếp tục", {
@@ -83,6 +86,27 @@ const Column = function ({ column, onCreateCard }) {
     // Clear input và đóng thẻ input
     setCardInput("");
     setShowAddCardInput(false);
+  };
+
+  // Xử lý sự kiện xóa Column (và Card bên trong)
+  const confirmDeleteColumn = useConfirm();
+  const deleteColumnHandler = function () {
+    confirmDeleteColumn({
+      title: "Delete Column ?",
+      description: "Bạn có chắc muốn xóa hoàn toàn Cột và các Thẻ bên trong",
+      confirmationText: "Đúng, xóa đi nào",
+      cancellationText: "Thôi",
+
+      dialogProps: { maxWidth: "xs" },
+      confirmationButtonProps: { color: "error", variant: "outlined" },
+      cancellationButtonProps: { color: "inherit" },
+      allowClose: false,
+      buttonOrder: ["confirm", "cancel"],
+    })
+      .then(() => {
+        onDeleteColumn(column._id);
+      })
+      .catch((err) => {});
   };
 
   return (
@@ -139,15 +163,24 @@ const Column = function ({ column, onCreateCard }) {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              onClick={handleClose}
               MenuListProps={{
                 "aria-labelledby": "basic-column-dropdown",
               }}
             >
-              <MenuItem>
+              <MenuItem
+                onClick={toggleShowAddCardInput}
+                sx={{
+                  "&:hover": {
+                    color: "success.light",
+                    "& .btn-icon-add": { color: "success.light" },
+                  },
+                }}
+              >
                 <ListItemIcon>
-                  <AddCardIcon fontSize="small" />
+                  <AddCardIcon className="btn-icon-add" fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Add new Card</ListItemText>
+                <ListItemText disableTypography>Add new Card</ListItemText>
               </MenuItem>
               <MenuItem>
                 <ListItemIcon>
@@ -170,9 +203,17 @@ const Column = function ({ column, onCreateCard }) {
 
               <Divider />
 
-              <MenuItem>
+              <MenuItem
+                onClick={deleteColumnHandler}
+                sx={{
+                  "&:hover": {
+                    color: "warning.dark",
+                    "& .btn-icon-delete": { color: "warning.dark" },
+                  },
+                }}
+              >
                 <ListItemIcon>
-                  <DeleteIcon fontSize="small" />
+                  <DeleteIcon className="btn-icon-delete" fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>Remove this column</ListItemText>
               </MenuItem>

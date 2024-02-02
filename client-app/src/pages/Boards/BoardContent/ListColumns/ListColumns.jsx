@@ -13,7 +13,12 @@ import TextField from "@mui/material/TextField";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ListColumns = function ({ columns, onCreateColumn, onCreateCard }) {
+const ListColumns = function ({
+  columns,
+  onCreateColumn,
+  onCreateCard,
+  onDeleteColumn,
+}) {
   const [showAddColumnInput, setShowAddColumnInput] = useState(false);
   const [columnInput, setColumnInput] = useState("");
 
@@ -61,7 +66,12 @@ const ListColumns = function ({ columns, onCreateColumn, onCreateCard }) {
       >
         {/* Columns rendering */}
         {columns.map((column, i) => (
-          <Column onCreateCard={onCreateCard} key={i} column={column} />
+          <Column
+            onCreateCard={onCreateCard}
+            onDeleteColumn={onDeleteColumn}
+            key={i}
+            column={column}
+          />
         ))}
 
         {/* Add new Column Button */}
@@ -146,7 +156,8 @@ const ListColumns = function ({ columns, onCreateColumn, onCreateCard }) {
                   paddingX: 3,
                   boxShadow: "none",
                   border: "0.5px solid",
-                  borderColor: (theme) => theme.palette.success.main,
+                  borderColor: "success.main",
+                  //  (theme) => theme.palette.success.main
                   "&:hover": {
                     backgroundColor: (theme) => theme.palette.success.main,
                   },

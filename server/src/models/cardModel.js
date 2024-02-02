@@ -97,10 +97,25 @@ const update = async (cardId, updatedData) => {
   }
 };
 
+const deleteCardsByColumn = async (columnId) => {
+  try {
+    const db = GET_DB();
+
+    const result = await db
+      .collection(CARD_COLLECTION_NAME)
+      .deleteMany({ columnId: new mongodb.ObjectId(columnId) });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const cardModel = {
   CARD_COLLECTION_NAME,
   CARD_COLLECTION_SCHEMA,
   createNew,
   findById,
   update,
+  deleteCardsByColumn,
 };

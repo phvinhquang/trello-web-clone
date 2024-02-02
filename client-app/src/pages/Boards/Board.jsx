@@ -10,11 +10,11 @@ import {
   createNewCardAPI,
   updateCardInColumnAPI,
   moveCardToDiffColumnAPI,
+  deleteColumnAPI,
 } from "~/apis/http";
 import { generatePlaceHolderCard } from "~/utils/helpers";
 import { isEmpty } from "lodash";
-
-import Box from "@mui/material/Box";
+import { toast } from "react-toastify";
 
 const Board = function () {
   const [board, setBoard] = useState(null);
@@ -67,7 +67,8 @@ const Board = function () {
   // Hàm gửi request tạo card mới
   const createNewCardHandler = async function (cardData) {
     const sentData = { ...cardData, boardId: board._id };
-    console.log(sentData);
+
+    // Gọi API
     const newCard = await createNewCardAPI(sentData);
 
     // Cập nhật lại state cho board
@@ -171,6 +172,21 @@ const Board = function () {
     });
   };
 
+  // Xử lý xóa Column
+  const deleteColumnHandler = async function (columnId) {
+    // Cập nhật cho state ở FE
+    const newBoard = { ...board };
+    newBoard.columns = newBoard.columns.filter((c) => c._id !== columnId);
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+      (id) => id !== columnId
+    );
+    setBoard(newBoard);
+
+    // Gọi API
+    const result = await deleteColumnAPI(columnId);
+    toast.success(result?.result);
+  };
+
   if (!board) {
     return <p>Loading...</p>;
   }
@@ -186,6 +202,7 @@ const Board = function () {
         onUpdateColumnOrder={updateColumnOrderHandler}
         onUpdateCardInSameColumn={updateCardOrderInSameColumn}
         onUpdateCardToDiffColumn={updateCardToDiffColumn}
+        onDeleteColumn={deleteColumnHandler}
       />
     </Container>
   );

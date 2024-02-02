@@ -113,6 +113,20 @@ const update = async (columnId, updatedData) => {
   }
 };
 
+const deleteOneById = async (id) => {
+  try {
+    const db = GET_DB();
+
+    const result = await db
+      .collection(COLUMN_COLLECTION_NAME)
+      .deleteOne({ _id: new mongodb.ObjectId(id) });
+
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const columnModel = {
   COLUMN_COLLECTION_NAME,
   COLUMN_COLLECTION_SCHEMA,
@@ -120,4 +134,5 @@ export const columnModel = {
   findById,
   pushCardOrderIds,
   update,
+  deleteOneById,
 };

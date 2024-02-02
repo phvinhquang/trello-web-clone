@@ -12,4 +12,11 @@ router.post("/columns", columnValidation.createNew, columnController.createNew);
 // Cập nhật card trong cùng column
 router.put("/columns/:id", columnValidation.update, columnController.update);
 
+// Xóa column
+router.delete(
+  "/columns/:id",
+  columnValidation.deleteItem,
+  columnController.deleteItem
+);
+
 export default router;

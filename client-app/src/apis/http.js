@@ -19,6 +19,11 @@ export const moveCardToDiffColumnAPI = async function (updatedData) {
   return res.data;
 };
 
+export const deleteColumnAPI = async function (columnId) {
+  const res = await axios.delete(`${API_URL}v1/columns/` + columnId);
+  return res.data;
+};
+
 export const updateCardInColumnAPI = async function (columnId, updatedData) {
   const res = await axios.put(`${API_URL}v1/columns/` + columnId, updatedData);
   return res.data;

@@ -35,6 +35,7 @@ const BoardContent = function ({
   onUpdateColumnOrder,
   onUpdateCardInSameColumn,
   onUpdateCardToDiffColumn,
+  onDeleteColumn,
 }) {
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -406,6 +407,7 @@ const BoardContent = function ({
           columns={orderedColumns}
           onCreateColumn={onCreateColumn}
           onCreateCard={onCreateCard}
+          onDeleteColumn={onDeleteColumn}
         />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}

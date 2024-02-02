@@ -18,20 +18,20 @@ const theme = extendTheme({
     columnHeaderHeight: COLUMN_HEADER_HEIGHT,
     columnFooterHeight: COLUMN_FOOTER_HEIGHT,
   },
-  colorSchemes: {
-    // light: {
-    //   palette: {
-    //     primary: teal,
-    //     secondary: deepOrange,
-    //   },
-    // },
-    // dark: {
-    //   palette: {
-    //     primary: cyan,
-    //     secondary: orange,
-    //   },
-    // },
-  },
+  // colorSchemes: {
+  //   light: {
+  //     palette: {
+  //       primary: teal,
+  //       secondary: deepOrange,
+  //     },
+  //   },
+  //   dark: {
+  //     palette: {
+  //       primary: orange,
+  //       secondary: orange,
+  //     },
+  //   },
+  // },
   components: {
     MuiCssBaseline: {
       styleOverrides: {

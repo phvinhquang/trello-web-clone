@@ -8,6 +8,7 @@ import {
   useSensors,
   DragOverlay,
   defaultDropAnimationSideEffects,
+  closestCenter,
   closestCorners,
   pointerWithin,
   getFirstCollision,
@@ -33,6 +34,7 @@ const BoardContent = function ({
   onCreateCard,
   onUpdateColumnOrder,
   onUpdateCardInSameColumn,
+  onUpdateCardToDiffColumn,
 }) {
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
@@ -69,7 +71,8 @@ const BoardContent = function ({
     over,
     activeColumn,
     activeCardId,
-    activeDragItemData
+    activeDragItemData,
+    triggerFrom
   ) {
     setOrderedColumns((prev) => {
       const overCardIndex = overColumn?.cards.findIndex(
@@ -78,6 +81,7 @@ const BoardContent = function ({
 
       // Tính toán vị trí cho index mới của card
       let newCardIndex;
+
       const isBelowOverItem =
         active.rect.current.translated &&
         active.rect.current.translated.top > over.rect.top + over.rect.height;
@@ -144,12 +148,26 @@ const BoardContent = function ({
         );
       }
 
+      // Để tránh gọi API nhiều lần khi dragOver
+      // Chỉ gọi API khi drag end
+      if (triggerFrom === "dragEndHandler") {
+        // Gọi API
+        onUpdateCardToDiffColumn(
+          activeCardId,
+          originalColumn._id,
+          nextOverColumn._id,
+          nextColumns
+        );
+      }
+
       return nextColumns;
     });
   };
 
   // Xử lý bug trong collision detection
   // args = arguments :)
+  // Hàm này để xử lý bug flickering khi kéo card qua column khác, nhưng hiệu quả khi kéo card trong cùng column đang khá tệ.
+  // Nên tạm thời dùng collisionDetection mặc định của dndkit.
   const collisionDetectionStrategy = useCallback(
     (args) => {
       // Nếu kéo column thì dùng thuật toán mặc định
@@ -170,15 +188,20 @@ const BoardContent = function ({
       let overId = getFirstCollision(pointerIntersections, "id");
       if (overId) {
         const intersectedColumn = orderedColumns.find((c) => c._id === overId);
-        if (!intersectedColumn) return;
-        overId = closestCorners({
-          ...args,
-          droppableContainers: args.droppableContainers.filter(
-            (container) =>
-              container.id !== overId &&
-              intersectedColumn?.cardOrderIds?.includes(container.id)
-          ),
-        })[0]?.id;
+
+        if (intersectedColumn) {
+          // console.log("overId before", overId);
+          overId = closestCenter({
+            ...args,
+            droppableContainers: args.droppableContainers.filter(
+              (container) =>
+                container.id !== overId &&
+                intersectedColumn?.cardOrderIds?.includes(container.id)
+            ),
+          })[0]?.id;
+
+          // console.log("overId after", overId);
+        }
 
         lastOverId.current = overId;
         return [{ id: overId }];
@@ -213,6 +236,7 @@ const BoardContent = function ({
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return;
 
     const { active, over } = event;
+    console.log("From drag over", event);
     if (!over) return;
     const {
       id: activeCardId,
@@ -241,8 +265,14 @@ const BoardContent = function ({
   // Hàm xử lý kết thúc sự kiện kéo thả
   const dragEndHandler = function (event) {
     //active là item được kéo, over là vị trí item được kéo đến cuối cùng
+
     const { active, over } = event;
-    if (!over || !active) return;
+    console.log("From drag end", event);
+    if (!over || !active) {
+      // console.log(active);
+      // console.log(over);
+      return;
+    }
 
     // KÉO THẢ CARD
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
@@ -254,10 +284,13 @@ const BoardContent = function ({
 
       // Tìm và so sánh column bắt đầu và kết thúc
       const activeColumn = findColumnByCardId(activeCardId);
+
+      // Khi dùng closestCorners và kéo 1 card sang 1 column rỗng. Over đang hiển thị id của column, không phải id card
       const overColumn = findColumnByCardId(overCardId);
       if (!activeColumn || !overColumn) return;
 
       if (originalColumn._id !== overColumn._id) {
+        console.log("Kéo sang column khác");
         // Kéo thả sang column khác
         moveCardToDiffColumn(
           overColumn,
@@ -266,7 +299,9 @@ const BoardContent = function ({
           over,
           activeColumn,
           activeCardId,
-          activeDragItemData
+          activeDraggingCardData,
+          "dragEndHandler"
+          // activeDragItemData
         );
       } else {
         // Kéo card trong cùng column

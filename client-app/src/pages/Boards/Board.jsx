@@ -9,6 +9,7 @@ import {
   createNewColumnAPI,
   createNewCardAPI,
   updateCardInColumnAPI,
+  moveCardToDiffColumnAPI,
 } from "~/apis/http";
 import { generatePlaceHolderCard } from "~/utils/helpers";
 import { isEmpty } from "lodash";
@@ -78,8 +79,14 @@ const Board = function () {
       );
       if (!updatedColumn) return;
 
-      updatedColumn.cards.push(newCard);
-      updatedColumn.cardOrderIds.push(newCard._id);
+      // Khi add card vào column rỗng thì xóa placeholder card đi
+      if (updatedColumn.cards.some((c) => c.FE_placeholderCard)) {
+        updatedColumn.cards = [newCard];
+        updatedColumn.cardOrderIds = [newCard._id];
+      } else {
+        updatedColumn.cards.push(newCard);
+        updatedColumn.cardOrderIds.push(newCard._id);
+      }
 
       // newBoard.columns = updatedColumn;
       return newBoard;
@@ -111,7 +118,6 @@ const Board = function () {
     dndOrderedCardIds,
     columnId
   ) {
-    console.log("aa");
     // Cập nhật state cho board
     const newBoard = { ...board };
     const updatedColumn = newBoard.columns.find((c) => c._id === columnId);
@@ -122,9 +128,47 @@ const Board = function () {
     setBoard(newBoard);
 
     // Gọi API
-    // await updateCardInColumnAPI(columnId, {
-    //   cardOrderIds: dndOrderedCardIds,
-    // });
+    await updateCardInColumnAPI(columnId, {
+      cardOrderIds: dndOrderedCardIds,
+    });
+  };
+
+  // Update db khi chuyển card sang 1 column khác
+  const updateCardToDiffColumn = function (
+    currentCardId,
+    prevColumnId,
+    nextColumnId,
+    newOrderedColumns
+  ) {
+    // console.log(currentCardId, prevColumnId, nextColumnId, newOrderedColumns);
+
+    // Cập nhật lại state cho board
+    const newOrderColumnsIds = newOrderedColumns.map((c) => c._id);
+    const newBoard = { ...board };
+    newBoard.columns = newOrderedColumns;
+    newBoard.columnOrderIds = newOrderColumnsIds;
+    setBoard(newBoard);
+
+    // Nếu sau khi kéo card, column chỉ còn placeholder card thì chỉ gửi lên mảng rỗng
+    // Vì placeholder card sẽ không qua được validation
+    let prevCardOrderIds = newOrderedColumns.find(
+      (c) => c._id === prevColumnId
+    )?.cardOrderIds;
+    if (prevCardOrderIds[0].includes("placeholder-card")) {
+      prevCardOrderIds = [];
+    }
+
+    // Gọi API
+    moveCardToDiffColumnAPI({
+      currentCardId,
+      prevColumnId,
+      // Thứ tự card mới cho column cũ
+      prevCardOrderIds: prevCardOrderIds,
+      nextColumnId,
+      // Thứ tự card mới cho column đích
+      nextCardOrderIds: newOrderedColumns.find((c) => c._id === nextColumnId)
+        ?.cardOrderIds,
+    });
   };
 
   if (!board) {
@@ -141,6 +185,7 @@ const Board = function () {
         onCreateCard={createNewCardHandler}
         onUpdateColumnOrder={updateColumnOrderHandler}
         onUpdateCardInSameColumn={updateCardOrderInSameColumn}
+        onUpdateCardToDiffColumn={updateCardToDiffColumn}
       />
     </Container>
   );

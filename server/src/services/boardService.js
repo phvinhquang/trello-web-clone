@@ -2,6 +2,8 @@ import { slugify } from "../utils/formatter.js";
 import { boardModel } from "../models/boardModel.js";
 import ApiError from "../utils/ApiError.js";
 import cloneDeep from "lodash/cloneDeep.js";
+import { columnModel } from "../models/columnModel.js";
+import { cardModel } from "../models/cardModel.js";
 
 const createNew = async (reqBody) => {
   try {
@@ -59,8 +61,34 @@ const update = async (boardId, reqBody) => {
   }
 };
 
+const moveCardToDiffColumn = async (reqBody) => {
+  try {
+    // Cập nhật cardOrder của Column cũ
+    await columnModel.update(reqBody.prevColumnId, {
+      cardOrderIds: reqBody.prevCardOrderIds,
+      updatedAt: Date.now(),
+    });
+
+    // Cập nhật cardOrder của Column mới
+    await columnModel.update(reqBody.nextColumnId, {
+      cardOrderIds: reqBody.nextCardOrderIds,
+      updatedAt: Date.now(),
+    });
+
+    // Cập nhật columnId cho card đang được kéo
+    await cardModel.update(reqBody.currentCardId, {
+      columnId: reqBody.nextColumnId,
+    });
+
+    return { status: "Success" };
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const boardService = {
   createNew,
   getDetails,
   update,
+  moveCardToDiffColumn,
 };

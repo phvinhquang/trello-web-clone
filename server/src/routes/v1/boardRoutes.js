@@ -13,4 +13,11 @@ router.post("/boards", boardValidation.createNew, boardController.createNew);
 // Cập nhật thứ tự column cho board
 router.put("/boards/:id", boardValidation.update, boardController.update);
 
+// API hỗ trợ việc di chuyển card giữa các column khác nhau
+router.put(
+  "/boards/supports/moving-card",
+  boardValidation.moveCardToDiffColumn,
+  boardController.moveCardToDiffColumn
+);
+
 export default router;

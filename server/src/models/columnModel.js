@@ -98,8 +98,6 @@ const update = async (columnId, updatedData) => {
       }
     });
 
-    console.log(updatedData);
-
     // Thực hiện update trong db
     const result = await db.collection(COLUMN_COLLECTION_NAME).findOneAndUpdate(
       { _id: new mongodb.ObjectId(columnId) },

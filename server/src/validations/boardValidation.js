@@ -1,5 +1,6 @@
 import Joi from "joi";
 import ApiError from "../utils/ApiError.js";
+import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from "../utils/validators.js";
 
 const createNew = async (req, res, next) => {
   const correctCondition = Joi.object({
@@ -47,7 +48,46 @@ const update = async (req, res, next) => {
   }
 };
 
+const moveCardToDiffColumn = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    currentCardId: Joi.string()
+      .required()
+      .pattern(OBJECT_ID_RULE)
+      .message(OBJECT_ID_RULE_MESSAGE),
+    prevColumnId: Joi.string()
+      .required()
+      .pattern(OBJECT_ID_RULE)
+      .message(OBJECT_ID_RULE_MESSAGE),
+    prevCardOrderIds: Joi.array()
+      .required()
+      .items(
+        Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+      ),
+    nextColumnId: Joi.string()
+      .required()
+      .pattern(OBJECT_ID_RULE)
+      .message(OBJECT_ID_RULE_MESSAGE),
+    nextCardOrderIds: Joi.array()
+      .required()
+      .items(
+        Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+      ),
+  });
+
+  try {
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+    });
+
+    next();
+  } catch (err) {
+    const error = new ApiError(422, err.message);
+    next(error);
+  }
+};
+
 export const boardValidation = {
   createNew,
   update,
+  moveCardToDiffColumn,
 };

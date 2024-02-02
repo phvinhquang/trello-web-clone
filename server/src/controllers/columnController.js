@@ -19,7 +19,6 @@ const getDetails = async (req, res, next) => {
 
     res.status(200).json(column);
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };
@@ -28,7 +27,7 @@ const update = async (req, res, next) => {
   try {
     const columnId = req.params.id;
 
-    const updatedColumn = await boardService.update(columnId, req.body);
+    const updatedColumn = await columnService.update(columnId, req.body);
 
     res.status(201).json(updatedColumn);
   } catch (err) {

@@ -37,8 +37,19 @@ const update = async (req, res, next) => {
   }
 };
 
+const moveCardToDiffColumn = async (req, res, next) => {
+  try {
+    const result = await boardService.moveCardToDiffColumn(req.body);
+    res.status(201).json(result);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 export const boardController = {
   createNew,
   getDetails,
   update,
+  moveCardToDiffColumn,
 };

@@ -39,7 +39,9 @@ const Board = function () {
 
         setBoard(board);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   // Hàm gửi request tạo column mới

@@ -17,7 +17,7 @@ app.use(cors(corsOptions));
 // To parse body json data
 app.use(express.json());
 
-app.use("/", (res, res) => {
+app.use("/status", (req, res) => {
   res.send("<h1>Welcome to Trello API</h1>");
 });
 app.use("/v1", boardRoutes);

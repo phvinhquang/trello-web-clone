@@ -46,11 +46,11 @@ exitHook(() => {
 
 // Kết nối tới database xong mới kích hoạt app
 C0NNECT_DB(() => {
-  if (process.env.BUILD_MODE !== "dev") {
+  if (process.env.BUILD_MODE === "dev") {
     app.listen(5000);
   }
 
-  if (process.env.BUILD_MODE !== "prod") {
+  if (process.env.BUILD_MODE === "prod") {
     app.listen(process.env.PORT);
   }
 })

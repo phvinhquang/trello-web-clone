@@ -17,6 +17,9 @@ app.use(cors(corsOptions));
 // To parse body json data
 app.use(express.json());
 
+app.use("/", (res, res) => {
+  res.send("<h1>Welcome to Trello API</h1>");
+});
 app.use("/v1", boardRoutes);
 app.use("/v1", columnRoutes);
 app.use("/v1", cardRoutes);
@@ -47,7 +50,7 @@ C0NNECT_DB(() => {
     app.listen(5000);
   }
 
-  if (process.env.BUILD_MODE !== "production") {
+  if (process.env.BUILD_MODE !== "prod") {
     app.listen(process.env.PORT);
   }
 })

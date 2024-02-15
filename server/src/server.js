@@ -61,6 +61,3 @@ C0NNECT_DB(() => {
     console.log(err);
     process.exit();
   });
-
-// 65b8bbadbd99c5a75fcdf35d
-// 65b8c49ba8ad9a31a2b89cda

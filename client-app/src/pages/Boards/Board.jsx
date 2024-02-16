@@ -190,7 +190,15 @@ const Board = function () {
   };
 
   if (!board) {
-    return <p>Loading...</p>;
+    return (
+      <>
+        <p>Loading...</p>
+        <p>
+          Due to Render's free service, you might need to wait a few minutes for
+          initial load, please be patient.
+        </p>
+      </>
+    );
   }
 
   return (

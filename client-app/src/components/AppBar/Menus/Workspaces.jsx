@@ -40,6 +40,7 @@ function Workspaces({ homePage }) {
               homePage && theme.palette.mode === "light" ? "#42526E" : "white"
             }`;
           },
+          width: "100%",
         }}
       >
         Workspaces

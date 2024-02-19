@@ -16,7 +16,8 @@ export default function AllBoards() {
     >
       <Container
         sx={{
-          maxWidth: "1300px",
+          maxWidth: "80vw",
+          minWidth: "60vw",
           margin: "auto",
           display: "flex",
           backgroundColor: (theme) => {

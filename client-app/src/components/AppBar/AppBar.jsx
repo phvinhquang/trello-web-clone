@@ -9,6 +9,7 @@ import Workspaces from "./Menus/Workspaces";
 import Starred from "./Menus/Starred";
 import Templates from "./Menus/Templates";
 import Profile from "./Menus/Profile";
+import AddNewBoard from "./Menus/AddNewBoard";
 
 // Import Components from MUI
 import Button from "@mui/material/Button";
@@ -20,6 +21,8 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Divider from "@mui/material/Divider";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 // Import Icons
 import AppsIcon from "@mui/icons-material/Apps";
@@ -32,6 +35,10 @@ import CloseIcon from "@mui/icons-material/Close";
 const AppBar = function ({ homePage }) {
   const [searchValue, setSearchValue] = useState("");
   const [showSearchClose, setShowSearchClose] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
   const navigate = useNavigate();
 
   const textFieldBlurHandler = function () {
@@ -41,6 +48,14 @@ const AppBar = function ({ homePage }) {
 
   const appIconClick = function () {
     navigate("/");
+  };
+
+  // Handle add new board event
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -130,6 +145,11 @@ const AppBar = function ({ homePage }) {
             <Starred homePage={homePage} />
             <Templates homePage={homePage} />
             <Button
+              id="add-board-button"
+              aria-controls={open ? "add-board-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
               sx={{
                 color: (theme) => {
                   return `${
@@ -148,6 +168,29 @@ const AppBar = function ({ homePage }) {
             >
               Create
             </Button>
+
+            <Menu
+              id="add-board-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              // onBlur={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "add-board-button",
+              }}
+            >
+              <Box
+                // onClick={handleClose}
+                sx={{
+                  width: "300px",
+                  paddingX: "10px",
+                  fontSize: "14px",
+                  display: "block",
+                }}
+              >
+                <AddNewBoard onClose={handleClose} />
+              </Box>
+            </Menu>
           </Box>
         </Box>
 

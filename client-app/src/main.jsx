@@ -16,21 +16,27 @@ import CssBaseline from "@mui/material/CssBaseline";
 // Confirm popup
 import { ConfirmProvider } from "material-ui-confirm";
 
+// Redux
+import { Provider } from "react-redux";
+import store from "./redux/index.js";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <CssVarsProvider theme={theme}>
-      <ConfirmProvider
-        defaultOptions={{
-          dialogProps: { maxWidth: "xs" },
-          confirmationButtonProps: { color: "error", variant: "outlined" },
-          cancellationButtonProps: { color: "inherit" },
-          allowClose: false,
-        }}
-      >
-        <CssBaseline />
-        <App />
-        <ToastContainer position="bottom-left" theme="colored" />
-      </ConfirmProvider>
-    </CssVarsProvider>
+    <Provider store={store}>
+      <CssVarsProvider theme={theme}>
+        <ConfirmProvider
+          defaultOptions={{
+            dialogProps: { maxWidth: "xs" },
+            confirmationButtonProps: { color: "error", variant: "outlined" },
+            cancellationButtonProps: { color: "inherit" },
+            allowClose: false,
+          }}
+        >
+          <CssBaseline />
+          <App />
+          <ToastContainer position="bottom-left" theme="colored" />
+        </ConfirmProvider>
+      </CssVarsProvider>
+    </Provider>
   </React.StrictMode>
 );

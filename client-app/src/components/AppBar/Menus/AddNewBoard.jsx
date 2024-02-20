@@ -1,21 +1,70 @@
+// Import Components from MUI
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
+// Import Icons from MUI
 import CloseIcon from "@mui/icons-material/Close";
 
 import backgroundImage from "../../../assets/background.png";
 import boardPlaceholder from "../../../assets/create-board.svg";
+import { createNewBoardAPI } from "~/apis/http";
+import { useState } from "react";
 
 export default function AddNewBoard({ onClose }) {
+  const [newBoardTitle, setNewBoardTitle] = useState("");
+  const [newBoardDesc, setNewBoardDesc] = useState("");
+  const [titleInputError, setTitleInputError] = useState(false);
+  const [descInputError, setDescInputError] = useState(false);
+  const [visibility, setVisibility] = useState("Public");
+
+  // Blur on inputs
+  const titleInputBlurHandler = function () {
+    if (newBoardTitle.trim() === "") setTitleInputError(true);
+  };
+
+  const descInputBlurHandler = function () {
+    if (newBoardDesc.trim() === "") setDescInputError(true);
+  };
+
+  // Handle visibility change
+  const handleChange = (event) => {
+    setVisibility(event.target.value);
+  };
+
+  // Create new board handler
+  const createNewBoardHandler = function () {
+    if (newBoardTitle.trim() === "" || newBoardDesc.trim() === "") return;
+
+    const newBoard = {
+      title: newBoardTitle,
+      description: newBoardDesc,
+      type: visibility.toLowerCase(),
+    };
+
+    console.log(newBoard);
+    // API call
+    createNewBoardAPI(newBoard)
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
+
+  // Button disable condition
+  const isDisable = newBoardDesc.trim() === "" || newBoardTitle.trim() === "";
+
   return (
     <Box>
       {/* Title and close button */}
       <Box
         sx={{
+          mt: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -65,14 +114,20 @@ export default function AddNewBoard({ onClose }) {
         <Typography
           sx={{ fontSize: "12px", fontWeight: 500, textAlign: "left" }}
         >
-          Board's Title
+          Board's Title (required)
         </Typography>
         <TextField
           variant="outlined"
           type="text"
           size="small"
+          value={newBoardTitle}
           required
-          error={true}
+          onChange={(e) => {
+            setTitleInputError(false);
+            setNewBoardTitle(e.target.value);
+          }}
+          onBlur={titleInputBlurHandler}
+          error={titleInputError}
           sx={{
             width: "100%",
             ".MuiInputBase-inputSizeSmall": {
@@ -82,8 +137,56 @@ export default function AddNewBoard({ onClose }) {
         />
       </Box>
 
+      {/* Board Description Input */}
+      <Box sx={{ mt: 1, mb: 2 }}>
+        <Typography
+          sx={{ fontSize: "12px", fontWeight: 500, textAlign: "left" }}
+        >
+          Board's Description (required)
+        </Typography>
+        <TextField
+          variant="outlined"
+          type="text"
+          size="small"
+          value={newBoardDesc}
+          required
+          onChange={(e) => {
+            setDescInputError(false);
+            setNewBoardDesc(e.target.value);
+          }}
+          onBlur={descInputBlurHandler}
+          error={descInputError}
+          sx={{
+            width: "100%",
+            ".MuiInputBase-inputSizeSmall": {
+              padding: "5px 8px",
+            },
+          }}
+        />
+      </Box>
+
+      <Box sx={{ mb: 2 }}>
+        <Typography
+          sx={{ fontSize: "12px", fontWeight: 500, textAlign: "left" }}
+        >
+          Visibility (required)
+        </Typography>
+        <FormControl size="small" sx={{ width: "100%" }}>
+          <Select value={visibility} onChange={handleChange} displayEmpty>
+            <MenuItem value="Public">Public</MenuItem>
+            <MenuItem value="Private">Private</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
       {/* Action */}
-      <Button variant="contained" disableElevation sx={{ width: "100%" }}>
+      <Button
+        variant="contained"
+        onClick={createNewBoardHandler}
+        disabled={isDisable}
+        disableElevation
+        sx={{ width: "100%", mb: 2 }}
+      >
         Create Board
       </Button>
     </Box>

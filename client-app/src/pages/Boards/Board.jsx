@@ -12,15 +12,20 @@ import {
   moveCardToDiffColumnAPI,
   deleteColumnAPI,
 } from "~/apis/http";
+import theme from "~/theme";
 import { generatePlaceHolderCard } from "~/utils/helpers";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
+import LoadingDots from "~/components/UI/LoadingDots";
+import { useParams } from "react-router-dom";
 
 const Board = function () {
   const [board, setBoard] = useState(null);
+  const params = useParams();
 
   useEffect(() => {
-    const boardId = "65b8bbadbd99c5a75fcdf35d";
+    // const boardId = "65b8bbadbd99c5a75fcdf35d";
+    const boardId = params.boardId;
     fetchBoardDetailsAPI(boardId)
       .then((board) => {
         // Sắp xếp thứ tự column theo columnOrderIds trước khi truyền xuống component con
@@ -42,7 +47,7 @@ const Board = function () {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [params]);
 
   // Hàm gửi request tạo column mới
   const createNewColumnHandler = async function (columnData) {
@@ -191,13 +196,13 @@ const Board = function () {
 
   if (!board) {
     return (
-      <>
-        <p>Loading...</p>
+      <div style={{ height: `calc(100vh - ${theme.customVars.appBarHeight})` }}>
+        <LoadingDots />
         <p>
           Due to Render's free service, you might need to wait a few minutes for
           initial load, please be patient.
         </p>
-      </>
+      </div>
     );
   }
 

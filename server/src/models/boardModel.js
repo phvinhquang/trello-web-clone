@@ -31,6 +31,19 @@ const validateBeforeCreate = async (data) => {
   });
 };
 
+//
+const getAll = async () => {
+  try {
+    const db = GET_DB();
+
+    const boards = await db.collection(BOARD_COLLECTION_NAME).find().toArray();
+
+    return boards;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 // Tạo board mới
 const createNew = async (data) => {
   try {
@@ -177,4 +190,5 @@ export const boardModel = {
   pushColumnOrderIds,
   pullColumnOrderIds,
   update,
+  getAll,
 };

@@ -11,6 +11,9 @@ import Templates from "./Menus/Templates";
 import Profile from "./Menus/Profile";
 import AddNewBoard from "./Menus/AddNewBoard";
 
+import backgroundImage from "../../assets/background.png";
+import boardPlaceholder from "../../assets/create-board.svg";
+
 // Import Components from MUI
 import Button from "@mui/material/Button";
 import Badge from "@mui/material/Badge";
@@ -23,6 +26,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Divider from "@mui/material/Divider";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
 
 // Import Icons
 import AppsIcon from "@mui/icons-material/Apps";
@@ -56,6 +61,13 @@ const AppBar = function ({ homePage }) {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  // Note: This function will basically stop any click event in form
+  // So if there're other select components there should be a problem
+  const stopImmediatePropagation = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   return (
@@ -169,6 +181,7 @@ const AppBar = function ({ homePage }) {
               Create
             </Button>
 
+            {/* Menu */}
             <Menu
               id="add-board-menu"
               anchorEl={anchorEl}
@@ -181,6 +194,9 @@ const AppBar = function ({ homePage }) {
             >
               <Box
                 // onClick={handleClose}
+                // Block choosing menu item with keyboard
+                // onClickCapture={stopImmediatePropagation}
+                onKeyDown={(e) => e.stopPropagation()}
                 sx={{
                   width: "300px",
                   paddingX: "10px",
@@ -188,6 +204,7 @@ const AppBar = function ({ homePage }) {
                   display: "block",
                 }}
               >
+                {/* Create board modal */}
                 <AddNewBoard onClose={handleClose} />
               </Box>
             </Menu>

@@ -36,8 +36,7 @@ export const updateCardInColumnAPI = async function (columnId, updatedData) {
 
 export const createNewBoardAPI = async function (boardData) {
   const res = await axios.post(`${API_URL}v1/boards/`, boardData);
-  console.log("from http.js", res);
-  return res.data;
+  return res;
 };
 
 export const createNewColumnAPI = async function (columnData) {

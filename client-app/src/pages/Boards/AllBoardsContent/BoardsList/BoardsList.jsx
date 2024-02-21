@@ -9,10 +9,8 @@ import backgroundImage from "../../../../assets/background.png";
 import LoadingDots from "~/components/UI/LoadingDots";
 import { Link } from "react-router-dom";
 
-export default function BoardsList({ boards }) {
-  //Fetch all board to have title data
-
-  if (!boards) {
+export default function BoardsList({ boards, isLoading }) {
+  if (!boards || isLoading) {
     return <LoadingDots />;
   }
 
@@ -27,7 +25,14 @@ export default function BoardsList({ boards }) {
       </Box>
 
       {/* List of boards */}
-      <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
+      <Box
+        sx={{
+          mt: 2,
+          display: "flex",
+          gap: 2,
+          flexWrap: "wrap",
+        }}
+      >
         {boards?.map((board) => (
           <Link
             key={board._id}
@@ -65,34 +70,67 @@ export default function BoardsList({ boards }) {
           </Link>
         ))}
 
-        {/* <Card
-          sx={{
-            width: "190px",
-            height: "100px",
-            backgroundImage: `url(${backgroundImage})`,
-            backgroundSize: "cover",
-            ":hover": {
-              cursor: "pointer",
-              opacity: 0.8,
-            },
-          }}
-        >
-          <CardContent sx={{ paddingY: 0 }}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontSize: "1.2em",
-                fontWeight: "bold",
-                textAlign: "left",
-                paddingY: 1,
-                color: "white",
-                letterSpacing: 1,
-              }}
-            >
-              Board Title
-            </Typography>
-          </CardContent>
-        </Card> */}
+        {/* <Link style={{ textDecoration: "none" }}>
+          <Card
+            sx={{
+              width: "220px",
+              height: "120px",
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: "cover",
+              ":hover": {
+                cursor: "pointer",
+                opacity: 0.8,
+              },
+            }}
+          >
+            <CardContent sx={{ paddingY: 0 }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontSize: "1.2em",
+                  fontWeight: "bold",
+                  textAlign: "left",
+                  paddingY: 1,
+                  color: "white",
+                  letterSpacing: 1,
+                }}
+              >
+                AA
+              </Typography>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link style={{ textDecoration: "none" }}>
+          <Card
+            sx={{
+              width: "220px",
+              height: "120px",
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: "cover",
+              ":hover": {
+                cursor: "pointer",
+                opacity: 0.8,
+              },
+            }}
+          >
+            <CardContent sx={{ paddingY: 0 }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontSize: "1.2em",
+                  fontWeight: "bold",
+                  textAlign: "left",
+                  paddingY: 1,
+                  color: "white",
+                  letterSpacing: 1,
+                }}
+              >
+                AA
+              </Typography>
+            </CardContent>
+          </Card>
+        </Link> */}
       </Box>
     </Box>
   );

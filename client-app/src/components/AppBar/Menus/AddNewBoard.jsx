@@ -15,6 +15,8 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import backgroundImage from "../../../assets/background.png";
 import boardPlaceholder from "../../../assets/create-board.svg";
+import { boardsActions } from "~/redux/boards-slice";
+import { useDispatch } from "react-redux";
 import { createNewBoardAPI } from "~/apis/http";
 import { useState } from "react";
 
@@ -24,6 +26,7 @@ export default function AddNewBoard({ onClose }) {
   const [titleInputError, setTitleInputError] = useState(false);
   const [descInputError, setDescInputError] = useState(false);
   const [visibility, setVisibility] = useState("Public");
+  const dispatch = useDispatch();
 
   // Blur on inputs
   const titleInputBlurHandler = function () {
@@ -52,7 +55,11 @@ export default function AddNewBoard({ onClose }) {
     console.log(newBoard);
     // API call
     createNewBoardAPI(newBoard)
-      .then((data) => console.log(data))
+      .then((res) => {
+        if (res.status === 201) {
+          dispatch(boardsActions.addBoard(res.data));
+        }
+      })
       .catch((err) => console.log(err));
   };
 

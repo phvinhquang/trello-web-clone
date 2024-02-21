@@ -7,6 +7,10 @@ const boardsSlice = createSlice({
     update(state, action) {
       return action.payload;
     },
+
+    addBoard(state, action) {
+      state.push(action.payload);
+    },
   },
 });
 

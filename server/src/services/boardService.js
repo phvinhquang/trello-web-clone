@@ -5,6 +5,15 @@ import cloneDeep from "lodash/cloneDeep.js";
 import { columnModel } from "../models/columnModel.js";
 import { cardModel } from "../models/cardModel.js";
 
+const getAll = async () => {
+  try {
+    const boards = await boardModel.getAll();
+    return boards;
+  } catch (err) {
+    throw err;
+  }
+};
+
 const createNew = async (reqBody) => {
   try {
     const board = {
@@ -17,7 +26,6 @@ const createNew = async (reqBody) => {
 
     // Dữ liệu đầy đủ để trả về FE
     const response = await boardModel.findById(newBoard.insertedId);
-    console.log(response);
 
     return response;
   } catch (err) {
@@ -91,4 +99,5 @@ export const boardService = {
   getDetails,
   update,
   moveCardToDiffColumn,
+  getAll,
 };

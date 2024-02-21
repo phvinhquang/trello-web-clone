@@ -13,7 +13,7 @@ import ContentPaste from "@mui/icons-material/ContentPaste";
 import Cloud from "@mui/icons-material/Cloud";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-function Workspaces() {
+function Workspaces({ homePage }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -34,7 +34,14 @@ function Workspaces() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
-        sx={{ color: "white" }}
+        sx={{
+          color: (theme) => {
+            return `${
+              homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+            }`;
+          },
+          width: "100%",
+        }}
       >
         Workspaces
       </Button>

@@ -36,7 +36,6 @@ const BoardBar = function ({ board }) {
     <Box
       px={2}
       sx={{
-        backgroundColor: "white",
         width: "100%",
         height: theme.customVars.boardBarHeight,
         display: "flex",

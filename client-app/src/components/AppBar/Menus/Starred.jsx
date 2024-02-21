@@ -9,7 +9,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Check from "@mui/icons-material/Check";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-function Starred() {
+function Starred({ homePage }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -30,7 +30,13 @@ function Starred() {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
-        sx={{ color: "white" }}
+        sx={{
+          color: (theme) => {
+            return `${
+              homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+            }`;
+          },
+        }}
       >
         Starred
       </Button>

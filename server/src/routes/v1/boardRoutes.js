@@ -4,6 +4,9 @@ import { boardController } from "../../controllers/boardController.js";
 
 const router = express.Router();
 
+// Fetch all boards
+router.get("/boards", boardController.getAllBoards);
+
 // Fetch board
 router.get("/boards/:id", boardController.getDetails);
 

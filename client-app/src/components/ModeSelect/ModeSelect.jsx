@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
+import theme from "~/theme";
 
 // Import Components form MUI
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Box } from "@mui/material";
 import { useColorScheme } from "@mui/material/styles";
 
 // Import Icons
@@ -13,7 +13,7 @@ import SettingsSystemDaydreamIcon from "@mui/icons-material/SettingsSystemDaydre
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 
-const ModeSelect = function () {
+const ModeSelect = function ({ homePage }) {
   const { mode, setMode } = useColorScheme();
 
   const handleSelect = (e) => {
@@ -24,7 +24,20 @@ const ModeSelect = function () {
     <FormControl size="small" sx={{ minWidth: 120 }}>
       <InputLabel
         id="label-select-dark-light-mode"
-        sx={{ color: "white", "&.Mui-focused": { color: "white" } }}
+        sx={{
+          color: (theme) => {
+            return `${
+              homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+            }`;
+          },
+          "&.Mui-focused": {
+            color: (theme) => {
+              return `${
+                homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+              }`;
+            },
+          },
+        }}
       >
         Mode
       </InputLabel>
@@ -34,18 +47,38 @@ const ModeSelect = function () {
         value={mode}
         label="Mode"
         sx={{
-          color: "white",
+          color: (theme) => {
+            return `${
+              homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+            }`;
+          },
           ".MuiOutlinedInput-notchedOutline": {
-            borderColor: "white",
+            borderColor: (theme) => {
+              return `${
+                homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+              }`;
+            },
           },
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "white",
+            borderColor: (theme) => {
+              return `${
+                homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+              }`;
+            },
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "white",
+            borderColor: (theme) => {
+              return `${
+                homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+              }`;
+            },
           },
           ".MuiSvgIcon-root": {
-            color: "white",
+            color: (theme) => {
+              return `${
+                homePage && theme.palette.mode === "light" ? "#42526E" : "white"
+              }`;
+            },
           },
         }}
         onChange={handleSelect}

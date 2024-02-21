@@ -1,6 +1,16 @@
 import ApiError from "../utils/ApiError.js";
 import { boardService } from "../services/boardService.js";
 
+const getAllBoards = async (req, res, next) => {
+  try {
+    const boards = await boardService.getAll();
+
+    res.status(200).json({ boards: boards });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const createNew = async (req, res, next) => {
   try {
     const board = await boardService.createNew(req.body);
@@ -52,4 +62,5 @@ export const boardController = {
   getDetails,
   update,
   moveCardToDiffColumn,
+  getAllBoards,
 };

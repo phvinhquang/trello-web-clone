@@ -207,7 +207,11 @@ const Board = function () {
   }
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{ height: `calc(100vh - ${theme.customVars.appBarHeight})` }}
+    >
       {/* <AppBar /> */}
       <BoardBar board={board} />
       <BoardContent

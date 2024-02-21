@@ -14,7 +14,7 @@ export default function LeftMenu() {
         // border: "1px solid #ccc",
         maxWidth: "300px",
         minWidth: "150px",
-        height: "100vh",
+        height: "100%",
         flex: 1,
       }}
     >

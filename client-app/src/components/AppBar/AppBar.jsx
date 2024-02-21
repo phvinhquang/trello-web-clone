@@ -71,13 +71,17 @@ const AppBar = function ({ homePage }) {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        height: theme.customVars.appBarHeight,
+      }}
+    >
       <Box
         paddingX={2}
         sx={{
           // backgroundColor: "primary.light",
           width: "100%",
-          height: theme.customVars.appBarHeight,
+          height: `calc(${theme.customVars.appBarHeight} - 1px)`,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -354,8 +358,9 @@ const AppBar = function ({ homePage }) {
           <Profile />
         </Box>
       </Box>
+
       <Divider />
-    </>
+    </Box>
   );
 };
 

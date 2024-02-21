@@ -1,4 +1,5 @@
 import { Container, Box } from "@mui/material";
+import theme from "~/theme";
 import LeftMenu from "~/components/AllBoards/LeftMenu";
 import AllBoardsContent from "./AllBoardsContent/AllBoardsContent";
 
@@ -9,6 +10,7 @@ export default function AllBoards() {
       maxWidth={false}
       sx={{
         paddingTop: "30px",
+        height: `calc(100vh - ${theme.customVars.appBarHeight})`,
         backgroundColor: (theme) => {
           return theme.palette.mode === "dark" ? "#2c3e50" : "#fff";
         },
